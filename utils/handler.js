@@ -216,7 +216,7 @@ class Handler {
   async listFiles() {
     return new Promise(resolve => {
       this.client.emit("debug", "[EMC]: Listing files to download");
-      let url = this.options.url + "reader.php";
+      let url = this.options.url + "index.php";
 
       fetch(url)
       .then(response => response.text())
