@@ -15,11 +15,7 @@ process.argv.forEach(function (val, index, array) {
     }
 });
 
-console.log("Version: " + version);
-console.log("Path: " + path);
-
 if(version == null || path == null) {
-    console.log("Usage: node builder/main.js --version=@version --path=@path");
     return;
 }
 
