@@ -34,18 +34,18 @@ class EMCCore extends EventEmitter {
     var self = this;
 
     if (!fs.existsSync(this.options.root)) {
-      this.emit('debug', `[EMC]: Attempting to create root folder`)
+      this.emit('debug', `[emc-core-luuxis]: Attempting to create root folder`)
       fs.mkdirSync(path.join(this.options.root, "runtime", "java"), {recursive: true})
     }
 
     if (fs.existsSync(path.join(__dirname, '..', 'package.json'))) {
-      this.emit('debug', `[EMC]: EMC version ${JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), { encoding: 'utf8' })).version}`)
-    } else { this.emit('debug', '[EMC]: Package JSON not found, skipping EMC version check.') }
+      this.emit('debug', `[emc-core-luuxis]: EMC version ${JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), { encoding: 'utf8' })).version}`)
+    } else { this.emit('debug', '[emc-core-luuxis]: Package JSON not found, skipping EMC version check.') }
     const java = await this.handler.checkJava(this.options.javaPath || 'java')
     let hasJava = true;
     if (!java.run) {
         if(!fs.existsSync(path.join(this.options.root, "runtime", "java", "bin"))) {
-            this.emit('debug', `[EMC]: Couldn't find java, download it at ${this.options.root}`)
+            this.emit('debug', `[emc-core-luuxis]: Couldn't find java, download it at ${this.options.root}`)
             await this.handler.downloadJava();
         }
         hasJava = false;
@@ -66,11 +66,11 @@ class EMCCore extends EventEmitter {
 
     let modifyJson = null
     if (this.options.forge) {
-      //this.emit('debug', '[EMC]: Detected Forge in options, getting dependencies')
+      //this.emit('debug', '[emc-core-luuxis]: Detected Forge in options, getting dependencies')
       //modifyJson = await this.handler.getForgedWrapped()
     }
     if(this.options.forge) {
-      this.emit('debug', '[EMC]: Setting up version file')
+      this.emit('debug', '[emc-core-luuxis]: Setting up version file')
       modifyJson = JSON.parse(fs.readFileSync(path.join(this.options.root, 'versions', this.options.forge, `${this.options.forge}.json`), { encoding: 'utf8' }))
     }
     
@@ -95,7 +95,7 @@ class EMCCore extends EventEmitter {
     const classes = this.options.overrides.classes || this.handler.cleanUp(await this.handler.getClasses(modifyJson))
     const classPaths = ['-cp']
     const separator = this.handler.getOS() === 'windows' ? ';' : ':'
-    this.emit('debug', `[EMC]: Using ${separator} to separate class paths`)
+    this.emit('debug', `[emc-core-luuxis]: Using ${separator} to separate class paths`)
     // Handling launch arguments.
     const file = modifyJson || versionFile
     // So mods like fabric work.
@@ -110,7 +110,7 @@ class EMCCore extends EventEmitter {
 
     const launchArguments = args.concat(jvm, classPaths, launchOptions)
     this.emit('arguments', launchArguments)
-    this.emit('debug', `[EMC]: Launching with arguments ${launchArguments.join(' ')}`)
+    this.emit('debug', `[emc-core-luuxis]: Launching with arguments ${launchArguments.join(' ')}`)
 
     this.emit('launch', "launch");
 

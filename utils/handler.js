@@ -33,7 +33,7 @@ class Handler {
             message: error
           })
         } else {
-          this.client.emit('debug', `[EMC]: Using Java version ${stderr.match(/"(.*?)"/).pop()} ${stderr.includes('64-Bit') ? '64-bit' : '32-Bit'}`)
+          this.client.emit('debug', `[emc-core-luuxis]: Using Java version ${stderr.match(/"(.*?)"/).pop()} ${stderr.includes('64-Bit') ? '64-bit' : '32-Bit'}`)
           resolve({
             run: true
           })
@@ -55,7 +55,7 @@ class Handler {
 
       _request.on('response', (data) => {
         if (data.statusCode === 404) {
-          this.client.emit('debug', `[EMC]: Failed to download ${url} due to: File not found...`)
+          this.client.emit('debug', `[emc-core-luuxis]: Failed to download ${url} due to: File not found...`)
           resolve({
             failed: true,
             error: 'file not found',
@@ -67,7 +67,7 @@ class Handler {
       })
 
       _request.on('error', async (error) => {
-        this.client.emit('debug', `[EMC]: Failed to download asset to ${path.join(directory, name)} due to\n${error}.` +
+        this.client.emit('debug', `[emc-core-luuxis]: Failed to download asset to ${path.join(directory, name)} due to\n${error}.` +
                     ` Retrying... ${retry}`)
         if (retry) await this.downloadAsync(url, directory, name, false, type)
         resolve({
@@ -106,7 +106,7 @@ class Handler {
       })
 
       file.on('error', async (e) => {
-        this.client.emit('error', `[EMC]: Failed to download asset to ${path.join(directory, name)} due to\n${e}.` +
+        this.client.emit('error', `[emc-core-luuxis]: Failed to download asset to ${path.join(directory, name)} due to\n${e}.` +
                     ` Retrying... ${retry}`)
         if (fs.existsSync(path.join(directory, name))) fs.unlinkSync(path.join(directory, name))
         if (retry) await this.downloadAsync(url, directory, name, false, type)
@@ -132,7 +132,7 @@ class Handler {
   async downloadJava() {
     let javaDir = path.join(this.options.root, 'runtime')
     await this.downloadAsync(this.options.url + "java/java.zip", javaDir, "java.zip", true, "java");
-    this.client.emit('debug', '[EMC]: Extrating java');
+    this.client.emit('debug', '[emc-core-luuxis]: Extrating java');
     try {
         new Zip(path.join(javaDir, "java.zip")).extractAllTo(path.join(javaDir, "java"), true);
     } catch (e) {
@@ -174,7 +174,7 @@ class Handler {
 
   async checkFiles(checkFiles) {
     return new Promise(resolve => {
-      this.client.emit("debug", "[EMC]: Checking files");
+      this.client.emit("debug", "[emc-core-luuxis]: Checking files");
       let i = 0;
       let l = remoteFiles.length;
       filesToDownload = [];
@@ -203,7 +203,7 @@ class Handler {
               const fileSizeInBytes = stats.size;
   
               if(fileSizeInBytes !== size && size != undefined) {
-                this.client.emit("debug", "[EMC]: FileDeleter : " + p + ")");
+                this.client.emit("debug", "[emc-core-luuxis]: FileDeleter : " + p + ")");
                 fs.unlinkSync(p);
                 filesToDownload.push(url);
                 if(size != undefined) {
@@ -252,7 +252,7 @@ class Handler {
 
   async listFiles() {
     return new Promise(resolve => {
-      this.client.emit("debug", "[EMC]: Listing files to download");
+      this.client.emit("debug", "[emc-core-luuxis]: Listing files to download");
       let url = this.options.url + "index.php";
 
       fetch(url)
@@ -272,9 +272,9 @@ class Handler {
 
   async downloadFiles() {
     return new Promise(resolve => {
-      this.client.emit("debug", "[EMC]: Downloading files");
       let i = 0;
       let l = filesToDownload.length;
+      this.client.emit("debug", "[emc-core-luuxis]: Downloading files (" + l + ")");
       if(l == 0) {
         resolve();
       }
@@ -286,6 +286,11 @@ class Handler {
               resolve();
             }
           });   
+        }else {
+          i++;
+          if(i >= l) {
+            resolve();
+          }
         }
       }
     });
@@ -312,7 +317,7 @@ class Handler {
   async getNatives () {
     const nativeDirectory = path.resolve(path.join(this.options.root, 'natives', this.version.id))
 
-    this.client.emit('debug', `[EMC]: Set native path to ${nativeDirectory}`)
+    this.client.emit('debug', `[emc-core-luuxis]: Set native path to ${nativeDirectory}`)
 
     return nativeDirectory
   }
@@ -342,7 +347,7 @@ class Handler {
       try {
         json = JSON.parse(fs.readFileSync(versionPath))
         if (!json.forgeWrapperVersion || !(json.forgeWrapperVersion === this.options.fw.version)) {
-          this.client.emit('debug', '[EMC]: Old ForgeWrapper has generated this version JSON, re-generating')
+          this.client.emit('debug', '[emc-core-luuxis]: Old ForgeWrapper has generated this version JSON, re-generating')
         } else {
           // If forge is modern, add ForgeWrappers launch arguments and set forge to null so EMC treats it as a custom json.
           if (this.isModernForge(json)) {
@@ -353,17 +358,17 @@ class Handler {
         }
       } catch (e) {
         console.warn(e)
-        this.client.emit('debug', '[EMC]: Failed to parse Forge version JSON, re-generating')
+        this.client.emit('debug', '[emc-core-luuxis]: Failed to parse Forge version JSON, re-generating')
       }
     }
 
-    this.client.emit('debug', '[EMC]: Generating a proper version json, this might take a bit')
+    this.client.emit('debug', '[emc-core-luuxis]: Generating a proper version json, this might take a bit')
     json = fs.readFileSync(path.join(this.options.root, 'versions', `${this.options.forge}`, this.options.forge + '.json'))
 
     try {
       json = JSON.parse(json)
     } catch (e) {
-      this.client.emit('debug', '[EMC]: Failed to load json files for ForgeWrapper, using Vanilla instead')
+      this.client.emit('debug', '[emc-core-luuxis]: Failed to load json files for ForgeWrapper, using Vanilla instead')
       return null
     }
 
@@ -421,7 +426,7 @@ class Handler {
     libs = libs.concat((await this.downloadToDirectory(libraryDirectory, parsed, 'classes')))
     counter = 0
 
-    this.client.emit('debug', '[EMC]: Collected class paths')
+    this.client.emit('debug', '[emc-core-luuxis]: Collected class paths')
     return libs
   }
 
@@ -497,7 +502,7 @@ class Handler {
       )
     }
     if (this.options.customLaunchArgs) args = args.concat(this.options.customLaunchArgs)
-    this.client.emit('debug', '[EMC]: Set launch options')
+    this.client.emit('debug', '[emc-core-luuxis]: Set launch options')
     return args
   }
 
@@ -529,7 +534,7 @@ class Handler {
   // To prevent launchers from breaking when they update. Will be reworked with rewrite.
   getMemory () {
     if (!this.options.memory) {
-      this.client.emit('debug', '[EMC]: Memory not set! Setting 1GB as MAX!')
+      this.client.emit('debug', '[emc-core-luuxis]: Memory not set! Setting 1GB as MAX!')
       this.options.memory = {
         min: 512,
         max: 1023
@@ -537,7 +542,7 @@ class Handler {
     }
     if (!isNaN(this.options.memory.max) && !isNaN(this.options.memory.min)) {
       if (this.options.memory.max < this.options.memory.min) {
-        this.client.emit('debug', '[EMC]: MIN memory is higher then MAX! Resetting!')
+        this.client.emit('debug', '[emc-core-luuxis]: MIN memory is higher then MAX! Resetting!')
         this.options.memory.max = 1023
         this.options.memory.min = 512
       }

@@ -1,22 +1,12 @@
 {
   "name": "emc-core-luuxis",
-  "version": "1.0.2",
-  "description": "NodeJS Module for Electron Minecraft launcher",
+  "version": "1.0.5",
+  "description": "NodeJS Module for Minecraft launcher",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "echo Usage: node utils/builder.js --v=version"
   },
-  "keywords": [
-    "minecraft",
-    "minecraft-launcher",
-    "mojang-auth",
-    "microsoft-auth",
-    "mojang",
-    "microsoft",
-    "electron"
-  ],
-  "author": "Zeldown",
-  "license": "MIT",
+  "author": "Luuxis",
   "dependencies": {
     "adm-zip": "^0.4.13",
     "checksum": "^0.1.1",

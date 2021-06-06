@@ -21,13 +21,13 @@ npm start
 
 ## Installation :package:
 ```npm
-npm install emc-core
+npm install emc-core-luuxis
 ```
 
 ## Usage :triangular_flag_on_post:
 Require library
 ```javascript
-const { MCAuth, MCLaunch } = require('emc-core');
+const { MCAuth, MCLaunch } = require('emc-core-luuxis');
 ```
 
 Create and Init launcher var [MCLaunch](utils/launcher.js)
@@ -75,7 +75,7 @@ let opts = {
     detached: false
   },
   authorization: authenticator,
-  root: "C:/Users/guill/AppData/Roaming/.worldclient",
+  root: "C:/Users/guill/AppData/Roaming/.emc-core",
   version: "1.15.2",
   forge: "1.15.2-forge-31.2.0",
   checkFiles: true,
@@ -183,10 +183,22 @@ let opts = {
 }
 ```
 
+## Build EMC-Core-Server with builder.js
+1. Clone **EMC-Core project** at *https://github.com/Zeldown/EMC-Core*
+2. Extract archive on your computer
+3. Go into emc-core extracted folder
+4. run ``npm i``
+5. run ``node utils/builder.js --version="@version"``
+
+Name | Type | Description
+--- | --- | ---
+@version | `String` | The name of minecraft vanilla version (e.g. 1.15.2)
+@path | `String` | The full path where build will be created (path must be exists)
+
 ## Build custom EMC-Core-Server
-1. Create a folder with the file [reader.php](EMC-Core-Server/reader.php)
+1. Create a folder with the file [reader.php](EMC-Core-Server/index.php)
 2. Create a folder **java**
-3. Put an archive of java named *java.zip* in ```java``` folder (exemple : [java.zip](EMC-Core-Server/java/java.zip)
+3. Put an archive of java named *java.zip* in ```java``` folder (exemple : [java.zip](EMC-Core-Server/java/java.zip))
 4. Create a folder **files**
 5. Put all files of minecraft in folder ```files``` like *assets, library, natives, mods, versions*
 6. Put your custom folder to your web hosting (exemple: upload folder My-Version at https://exemple.com/)
@@ -197,6 +209,18 @@ let opts = {
   ...
 }
 ```
+
+## EMC-Core-Server schema
+Here is a schema of a classic emc-core-server archive
+
+![emc-core-server](https://user-images.githubusercontent.com/42982613/120071026-948b2200-c08d-11eb-91fe-61b662a80e99.png)
+
+## EMC-Core-Server with forge
+1. Build a vanilla emc-core-server version with the base version of your forge (e.g. 1.15.2)
+2. Add your forge version files (@forge_version.json & @forge_version.jar) into *EMC-Core-Server/versions/@forge_version* (e.g. versions/1.15.2-forge-31.2.0/)
+3. Add forge libraries into *EMC-Core-Server/libraries*
+
+*(natives & assets are same in vanilla and forge version)*
 
 ## Credits :tada:
 Based on code of **Pierce01** :heart:
