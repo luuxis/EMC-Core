@@ -1,6 +1,6 @@
 {
   "name": "emc-core-luuxis",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "NodeJS Module for Minecraft launcher",
   "main": "index.js",
   "scripts": {
