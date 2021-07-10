@@ -33,24 +33,6 @@ class EMCCore extends EventEmitter {
 
     var self = this;
 
-    if (!fs.existsSync(this.options.root)) {
-      this.emit('debug', `[emc-core-luuxis]: Attempting to create root folder`)
-      fs.mkdirSync(path.join(this.options.root, "runtime", "java"), {recursive: true})
-    }
-
-    if (fs.existsSync(path.join(__dirname, '..', 'package.json'))) {
-      this.emit('debug', `[emc-core-luuxis]: EMC version ${JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), { encoding: 'utf8' })).version}`)
-    } else { this.emit('debug', '[emc-core-luuxis]: Package JSON not found, skipping EMC version check.') }
-    const java = await this.handler.checkJava(this.options.javaPath || 'java')
-    let hasJava = true;
-    if (!java.run) {
-        if(!fs.existsSync(path.join(this.options.root, "runtime", "java", "bin"))) {
-            this.emit('debug', `[emc-core-luuxis]: Couldn't find java, download it at ${this.options.root}`)
-            await this.handler.downloadJava();
-        }
-        hasJava = false;
-    }
-
     await this.handler.listFiles();
     await this.handler.checkFiles(this.options.checkFiles);
     await this.handler.downloadFiles();
