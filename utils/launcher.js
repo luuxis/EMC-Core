@@ -60,10 +60,6 @@ class EMCCore extends EventEmitter {
     const args = []
 
     let jvm = [
-      '-XX:-UseAdaptiveSizePolicy',
-      '-XX:-OmitStackTraceInFastThrow',
-      '-Dfml.ignorePatchDiscrepancies=true',
-      '-Dfml.ignoreInvalidMinecraftCertificates=true',
       `-Djava.library.path=${nativePath}`,
       `-Xmx${this.handler.getMemory()[0]}`,
       `-Xms${this.handler.getMemory()[1]}`
