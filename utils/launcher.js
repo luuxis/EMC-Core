@@ -60,6 +60,13 @@ class EMCCore extends EventEmitter {
     const args = []
 
     let jvm = [
+      '-XX:+UnlockExperimentalVMOptions',
+      '-XX:+UseG1GC',
+      '-XX:G1NewSizePercent=20',
+      '-XX:G1ReservePercent=20',
+      '-XX:MaxGCPauseMillis=50',
+      '-XX:G1HeapRegionSize=32M',
+      '-Dfml.ignoreInvalidMinecraftCertificates=true',
       `-Djava.library.path=${nativePath}`,
       `-Xmx${this.handler.getMemory()[0]}`,
       `-Xms${this.handler.getMemory()[1]}`
