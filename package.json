@@ -1,6 +1,6 @@
 {
   "name": "emc-core-luuxis",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "NodeJS Module for Minecraft launcher",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "checksum": "^0.1.1",
-    "minecraft-launcher-core": "^3.16.1",
+    "minecraft-launcher-core": "^3.16.6",
     "node-fetch": "^2.6.1",
     "remote-file-size": "^3.0.5",
     "request": "^2.88.2"

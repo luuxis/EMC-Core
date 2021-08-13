@@ -129,18 +129,6 @@ class Handler {
     })
   }
 
-  async downloadJava() {
-    let javaDir = path.join(this.options.root, 'runtime')
-    await this.downloadAsync(this.options.url + "java/java.zip", javaDir, "java.zip", true, "java");
-    this.client.emit('debug', '[emc-core-luuxis]: Extrating java');
-    try {
-        new Zip(path.join(javaDir, "java.zip")).extractAllTo(path.join(javaDir, "java"), true);
-    } catch (e) {
-        console.warn(e)
-    }
-    fs.unlinkSync(path.join(javaDir, "java.zip"));
-  }
-
   getPath(pt) {
     let p = "";
     for(let i=1;i<pt.length-1;i++) {
